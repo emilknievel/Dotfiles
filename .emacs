@@ -3,17 +3,48 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-names-vector ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(column-number-mode t)
  '(custom-enabled-themes nil)
+ '(custom-safe-themes
+   (quote
+    ("c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "53e29ea3d0251198924328fd943d6ead860e9f47af8d22f0b764d11168455a8e" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
+ '(fci-rule-color "#343d46")
+ '(menu-bar-mode nil)
  '(show-paren-mode t)
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(tool-bar-position (quote top) t)
+ '(vc-annotate-background nil)
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#bf616a")
+     (40 . "#DCA432")
+     (60 . "#ebcb8b")
+     (80 . "#B4EB89")
+     (100 . "#89EBCA")
+     (120 . "#89AAEB")
+     (140 . "#C189EB")
+     (160 . "#bf616a")
+     (180 . "#DCA432")
+     (200 . "#ebcb8b")
+     (220 . "#B4EB89")
+     (240 . "#89EBCA")
+     (260 . "#89AAEB")
+     (280 . "#C189EB")
+     (300 . "#bf616a")
+     (320 . "#DCA432")
+     (340 . "#ebcb8b")
+     (360 . "#B4EB89"))))
+ '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Consolas" :foundry "outline" :slant normal :weight normal :height 113 :width normal)))))
+ '(default ((t (:family "Terminus" :foundry "raster" :slant normal :weight normal :height 120 :width normal)))))
 
 (load "package")
 (package-initialize)
@@ -58,10 +89,18 @@
                           smex
                           sml-mode
                           solarized-theme
-			  spacegray-theme
+                          spacegray-theme
                           web-mode
                           writegood-mode
-                          yaml-mode)
+                          yaml-mode
+                          hlinum
+                          matlab-mode
+                          jedi
+                          jazz-theme
+			  zenburn
+			  yasnippet
+			  auto-complete-clang
+			  popup)
   "Default packages")
 
 (require 'cl)
@@ -81,6 +120,13 @@
 (setq inhibit-splash-screen t
       initial-scratch-message nil
       initial-major-mode 'org-mode)
+
+(require 'cc-mode)
+
+;;; yasnippet
+;;; should be loaded before auto complete so that they can work together
+(require 'yasnippet)
+(yas-global-mode 1)
 
 ;; Makes the default C-indentation not look like shit
 (setq c-default-style "linux"
@@ -154,14 +200,28 @@
 
 ;; This makes sure that brace structures (), [], {}, etc. are closed as soon as the opening character is typed.
 (require 'autopair)
+;;hoppla
+(autopair-global-mode 1)
+(setq autopair-autowrap t)
 
-;; Turn on auto complete.
+;;; auto complete mod
+;;; should be loaded after yasnippet so that they can work together
 (require 'auto-complete-config)
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
+;;; set the trigger key so that it can work together with yasnippet on tab key,
+;;; if the word exists in yasnippet, pressing tab will cause yasnippet to
+;;; activate, otherwise, auto-complete will
+(ac-set-trigger-key "TAB")
+(ac-set-trigger-key "<tab>")
+
+(require 'auto-complete-clang)
+(define-key c++-mode-map (kbd "C-S-<return>") 'ac-complete-clang)
+;; replace C-S-<return> with a key binding that you want
 
 ;; Load spacegray if in a graphical environment. Load the wombat theme if in a terminal.
 (if window-system
-    (load-theme 'spacegray t)
+    (load-theme 'jazz t)
   (load-theme 'wombat t))
 
 ;; --------------
@@ -252,3 +312,17 @@
 
 ;; Always end files in a newline.
 (setq require-final-newline 't)
+
+
+(global-linum-mode 1)
+
+(defadvice linum-update-window (around linum-dynamic activate)
+  (let* ((w (length (number-to-string
+                     (count-lines (point-min) (point-max)))))
+         (linum-format (concat " %" (number-to-string w) "d ")))
+    ad-do-it))
+
+(require 'hlinum)
+(hlinum-activate)
+
+(require 'flymake)
