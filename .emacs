@@ -44,7 +44,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Terminus" :foundry "raster" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "Terminus (TTF)" :foundry "outline" :slant normal :weight normal :height 120 :width normal)))))
 
 (load "package")
 (package-initialize)
@@ -100,7 +100,8 @@
 			  zenburn
 			  yasnippet
 			  auto-complete-clang
-			  popup)
+			  popup
+			  haxe-mode)
   "Default packages")
 
 (require 'cl)
@@ -122,6 +123,7 @@
       initial-major-mode 'org-mode)
 
 (require 'cc-mode)
+(require 'haxe-mode)
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
