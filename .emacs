@@ -3,25 +3,48 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(ansi-color-faces-vector [default bold shadow italic underline bold bold-italic bold])
- '(ansi-color-names-vector ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
+ '(ansi-color-faces-vector
+   [default bold shadow italic underline bold bold-italic bold])
+ '(ansi-color-names-vector
+   ["#2e3436" "#a40000" "#4e9a06" "#c4a000" "#204a87" "#5c3566" "#729fcf" "#eeeeec"])
  '(column-number-mode t)
  '(custom-enabled-themes nil)
- '(custom-safe-themes (quote ("c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "53e29ea3d0251198924328fd943d6ead860e9f47af8d22f0b764d11168455a8e" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
+ '(custom-safe-themes
+   (quote
+    ("c87cc60d01cf755375759d165c1d60d9586c6a31f0b5437a0378c2a93cfc8407" "fc5fcb6f1f1c1bc01305694c59a1a861b008c534cae8d0e48e4d5e81ad718bc6" "53e29ea3d0251198924328fd943d6ead860e9f47af8d22f0b764d11168455a8e" "1e7e097ec8cb1f8c3a912d7e1e0331caeed49fef6cff220be63bd2a6ba4cc365" default)))
  '(fci-rule-color "#343d46")
  '(menu-bar-mode nil)
  '(show-paren-mode t)
  '(tool-bar-mode nil)
  '(tool-bar-position (quote top))
  '(vc-annotate-background nil)
- '(vc-annotate-color-map (quote ((20 . "#bf616a") (40 . "#DCA432") (60 . "#ebcb8b") (80 . "#B4EB89") (100 . "#89EBCA") (120 . "#89AAEB") (140 . "#C189EB") (160 . "#bf616a") (180 . "#DCA432") (200 . "#ebcb8b") (220 . "#B4EB89") (240 . "#89EBCA") (260 . "#89AAEB") (280 . "#C189EB") (300 . "#bf616a") (320 . "#DCA432") (340 . "#ebcb8b") (360 . "#B4EB89"))))
+ '(vc-annotate-color-map
+   (quote
+    ((20 . "#bf616a")
+     (40 . "#DCA432")
+     (60 . "#ebcb8b")
+     (80 . "#B4EB89")
+     (100 . "#89EBCA")
+     (120 . "#89AAEB")
+     (140 . "#C189EB")
+     (160 . "#bf616a")
+     (180 . "#DCA432")
+     (200 . "#ebcb8b")
+     (220 . "#B4EB89")
+     (240 . "#89EBCA")
+     (260 . "#89AAEB")
+     (280 . "#C189EB")
+     (300 . "#bf616a")
+     (320 . "#DCA432")
+     (340 . "#ebcb8b")
+     (360 . "#B4EB89"))))
  '(vc-annotate-very-old-color nil))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Terminus" :foundry "xos4" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "Terminus (TTF)" :foundry "outline" :slant normal :weight normal :height 120 :width normal)))))
 
 (load "package")
 (package-initialize)
@@ -209,7 +232,7 @@
 ;;; should be loaded after yasnippet so that they can work together
 (require 'auto-complete-config)
 
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20150121.538/dict/")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20150116.1520/dict/")
 ;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
 
@@ -230,6 +253,35 @@
       (mapcar (lambda (item)(concat "-I" item))
               (split-string
                "
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++/x86_64-pc-cygwin
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++/backward
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include-fixed
+ /usr/include
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/../../../../lib/../include/w32api
+"
+               )))
+
+(cond ((eq system-type 'windows-nt)
+       (setq ac-clang-flags
+             (mapcar (lambda (item)(concat "-I" item))
+                     (split-string
+                      "
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++/x86_64-pc-cygwin
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include/c++/backward
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/include-fixed
+ /usr/include
+ /usr/lib/gcc/x86_64-pc-cygwin/4.9.2/../../../../lib/../include/w32api
+"
+                      ))))
+      ((eq system-type 'gnu/linux)
+       (setq ac-clang-flags
+             (mapcar (lambda (item)(concat "-I" item))
+                     (split-string
+                      "
  /usr/include/c++/4.9
  /usr/include/x86_64-linux-gnu/c++/4.9
  /usr/include/c++/4.9/backward
@@ -239,7 +291,7 @@
  /usr/include/x86_64-linux-gnu
  /usr/include
 "
-               )))
+                      )))))
 
 
 ;; Load spacegray if in a graphical environment. Load the wombat theme if in a terminal.
