@@ -44,7 +44,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:family "Terminus (TTF)" :foundry "outline" :slant normal :weight normal :height 120 :width normal)))))
+ '(default ((t (:family "DejaVu Sans Mono" :foundry "unknown" :slant normal :weight normal :height 98 :width normal)))))
 
 (load "package")
 (package-initialize)
@@ -121,7 +121,7 @@
       initial-major-mode 'org-mode)
 
 (require 'cc-mode)
-(require 'haxe-mode)
+;;(require 'haxe-mode)
 
 ;;; yasnippet
 ;;; should be loaded before auto complete so that they can work together
@@ -232,8 +232,8 @@
 ;;; should be loaded after yasnippet so that they can work together
 (require 'auto-complete-config)
 
-(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20150116.1520/dict/")
-;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
+;;(add-to-list 'ac-dictionary-directories "~/.emacs.d/elpa/auto-complete-20150116.1520/dict/")
+(add-to-list 'ac-dictionary-directories "~/.emacs.d/ac-dict")
 (ac-config-default)
 
 ;; Start auto-completion after 2 characters of a word
@@ -282,14 +282,15 @@
              (mapcar (lambda (item)(concat "-I" item))
                      (split-string
                       "
- /usr/include/c++/4.9
- /usr/include/x86_64-linux-gnu/c++/4.9
- /usr/include/c++/4.9/backward
- /usr/lib/gcc/x86_64-linux-gnu/4.9/include
+ /usr/include/c++/4.7
+ /usr/include/c++/4.7/x86_64-linux-gnu
+ /usr/include/c++/4.7/backward
+ /usr/lib/gcc/x86_64-linux-gnu/4.7/include
  /usr/local/include
- /usr/lib/gcc/x86_64-linux-gnu/4.9/include-fixed
+ /usr/lib/gcc/x86_64-linux-gnu/4.7/include-fixed
  /usr/include/x86_64-linux-gnu
  /usr/include
+
 "
                       )))))
 
@@ -407,4 +408,4 @@
   (interactive)
   (shell-command "wmctrl -r :ACTIVE: -btoggle,fullscreen"))
 
-(if (eq system-type 'gnu/linux) (global-set-key [f11] 'switch-full-screen))
+;;(if (eq system-type 'gnu/linux) (global-set-key [f11] 'switch-full-screen))
